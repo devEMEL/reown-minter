@@ -1,0 +1,15 @@
+{
+    "name": "@reown-minter/monorepo",
+    "version": "1.0.0",
+    "private": true,
+    "workspaces": [
+        "hardhat",
+        "nextjs"
+    ],
+    "scripts": {
+        "dev:next": "npm run dev -w @reown-minter/nextjs",
+        "build:next": "npm run build -w @reown-minter/nextjs",
+        "start:next": "npm run start -w @reown-minter/nextjs start",
+        "test:hardhat": "npm run test -w @reown-minter/hardhat"
+    }
+}
