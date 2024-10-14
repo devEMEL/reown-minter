@@ -1,5 +1,4 @@
-import AddCollectionModal from '@/components/AddCollectionModal';
-import CollectionList from '@/components/CollectionList';
+import Collections from '@/components/Collections';
 import Head from 'next/head';
 
 // Export the Home component
@@ -18,8 +17,8 @@ export default function Home() {
                     content="upgrade-insecure-requests"
                 ></meta>
             </Head>
-            <AddCollectionModal />
-            <CollectionList />
+            {/* components for the home page below */}
+            <Collections />
         </div>
     );
 }

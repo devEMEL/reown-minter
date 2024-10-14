@@ -2,17 +2,8 @@ import { ethers, parseEther, parseUnits, toNumber } from 'ethers';
 import Blockies from 'react-blockies';
 
 import { FileObject, PinataSDK } from 'pinata';
-import { Network, Alchemy } from 'alchemy-sdk';
 
 export const SCROLL_SEPOLIA_CA = '0xE7ddc21df6Cd8Ef4822010713868f348C8859178';
-
-   // Optional config object, but defaults to demo api-key and eth-mainnet.
-const settings = {
-    apiKey: process.env.NEXT_PUBLIC_ALCHEMY_API_KEY, // Replace with your Alchemy API Key.
-    network: Network.SCROLL_SEPOLIA, // Replace with your network.
-};
-const alchemy = new Alchemy(settings);
-
 
 const IMAGE_SAMPLE =
     'https://maroon-major-crawdad-175.mypinata.cloud/ipfs/bafkreiaiqqqnwyvi5gksqfwsqihdt7izf5fklnbehal7elyusducquwq6i';
@@ -45,7 +36,9 @@ export const truncateAddress = (
 export const imageURIToSrc = (imageURI: string) => {
     let imageSrc;
     if (imageURI.includes('//')) {
-        imageSrc = `https://maroon-major-crawdad-175.mypinata.cloud/ipfs/${imageURI.split('//')[1]}`;
+        imageSrc = `https://maroon-major-crawdad-175.mypinata.cloud/ipfs/${
+            imageURI.split('//')[1]
+        }`;
     } else {
         imageSrc = IMAGE_SAMPLE;
     }
@@ -72,56 +65,3 @@ export const getTokenURI = async (metadata: object) => {
     console.log(`ipfs://${upload.IpfsHash}`);
     return `ipfs://${upload.IpfsHash}`;
 };
-
-export const latestBlockNumber = async() => {
-    // Get the latest block number
-    const blockNumber = await alchemy.core.getBlockNumber();
-    // console.log(blockNumber);
-    return blockNumber;
-}
-
-export const getEthBalance = async(addr: any) => {
-    const balance = await alchemy.core.getBalance(addr, "latest");
-    return balance;
-}
-
-// Define function that handles the creation of a product through the marketplace contract
-export const MakeTxCallWithAlchemy = async(to: string, data: any) => {
-    console.log("testing alchemy");
-    const tx = {
-        to,
-        data
-    };
-    const response = alchemy.core.call(tx);
-    console.log(response);
-    return response;
-
-}
-
-export const MakeTxSendWithAlchemy = async(to:`0x${string}`| undefined , data:string, address:`0x${string}`| undefined, chainId: number, signer: any, value?: any) => {
-    console.log("testing alchemy");
-
-    let tx = {
-        to,
-        value: value ? parseEther(value.toString()) : toNumber(0),
-        gasLimit: toNumber("21000"),
-        maxPriorityFeePerGas: parseUnits("5", "gwei"),
-        maxFeePerGas: parseUnits("20", "gwei"),
-        nonce: await alchemy.core.getTransactionCount(
-            address as string,
-            "latest"
-          ),
-        type: 2,
-        chainId,
-    };
-
-    const txResponse = await signer.sendTransaction(tx);
-    console.log('Transaction Response:', txResponse);
-    return txResponse;
-
-}
-
-// const hexString = await response;
-// const address = "0x" + hexString.slice(-40);
-// console.log(address);
-

@@ -1,11 +1,9 @@
-import { buildModule } from "@nomicfoundation/hardhat-ignition/modules";
+import { buildModule } from '@nomicfoundation/hardhat-ignition/modules';
 
+const NFTCollectionFactoryModule = buildModule('NFTCollectionFactory', (m) => {
+    const NFTCollectionFactory = m.contract('NFTCollectionFactory');
 
-const NFTCollectionFactoryModule = buildModule("NFTCollectionFactory", (m) => {
-
-  const NFTCollectionFactory = m.contract("NFTCollectionFactory");
-
-  return { NFTCollectionFactory };
+    return { NFTCollectionFactory };
 });
 
 export default NFTCollectionFactoryModule;

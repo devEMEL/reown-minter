@@ -1,10 +1,11 @@
 import Link from 'next/link';
 import { DiscordIcon, TwitterIcon } from './Icons';
+import { Source_Code_Pro } from '@next/font/google';
 
-type Props = {
-    className?: string;
-};
-
+const Source_Code_Pro_ = Source_Code_Pro({
+    subsets: ['latin'],
+    weight: ['400'],
+});
 const navigation = [
     {
         name: 'Twitter Icon',
@@ -19,10 +20,8 @@ const navigation = [
 ];
 
 export default function Footer() {
-
-
     return (
-        <footer className=" text-[#ffffff] font-lato">
+        <footer className={`text-[#ffffff] ${Source_Code_Pro_.className}`}>
             <div className="mx-auto max-w-7xl py-6 px-5 sm:px-6 lg:px-8">
                 <div className="flex justify-center items-center space-x-6 md:order-2">
                     {navigation.map((item) => (

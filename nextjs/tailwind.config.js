@@ -33,6 +33,7 @@ module.exports = {
                 qwitcher: ['Qwitcher Grypen', 'cursive'],
                 matemasie: ['Matemasie', 'serif'],
                 lato: ['Lato'],
+                sourceCodePro: ['Source_Code_Pro'],
             },
         },
     },

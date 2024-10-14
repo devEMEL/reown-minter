@@ -1,70 +1,29 @@
-// import { Disclosure } from "@headlessui/react";
-import { Bars3Icon, XMarkIcon } from '@heroicons/react/24/outline';
+import { Bars3Icon, XMarkIcon, PlusIcon } from '@heroicons/react/24/outline';
 import Image from 'next/image';
 import { useEffect, useState } from 'react';
-import { useAccount, useBalance } from 'wagmi';
 import Link from 'next/link';
 import kombatOdysseyImg from '../public/kombat-odyssey.jpeg';
-import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { getEthBalance, latestBlockNumber } from '@/helpers';
-import { formatEther } from 'ethers';
 
 export default function Header() {
-
-
-    const [balance, setBalance] = useState("0");
-    const [blockNumber, setBlockNumber] = useState(6810228);
-    // Use the useAccount hook to store the user's address
-    const { address, isConnected } = useAccount();
-    const { data: ethBalance } = useBalance({ address, chainId: 534351 }); // 11155111 sepolia
-
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-    useEffect(() => {
-        const fetchBalance = async() => {
-            console.log(address);
-            const bal = await getEthBalance(address);
-            const ethBal = formatEther(bal.toString());
-            const roundedBalance = parseFloat(ethBal).toFixed(3);
-            console.log(roundedBalance);
-            setBalance(roundedBalance);
-        }
-        if (isConnected) {
-            fetchBalance();
-        }
-
-        const fetchBlockNumber = async () => {
-            const rs = await latestBlockNumber();
-            if(rs !== undefined) setBlockNumber(rs);
-        }
-
-        const interval = setInterval(() => {
-            fetchBlockNumber();  
-        }, 2000);
-
-        return () => clearInterval(interval);
-    }, [isConnected]);
-
-    // If the user is connected and has a balance, display the balance
     // useEffect(() => {
-    //     if (isConnected && ethBalance) {
-    //         // setDisplayBalance(true);
-    //         // return;
+    //     if (isConnected ) {
+
     //     }
-    // }, [ethBalance, isConnected]);
+    // }, [isConnected]);
 
     const handleToggleMenu = () => {
         setIsMobileMenuOpen(!isMobileMenuOpen);
     };
 
     return (
-        <div className="bg-[#ffffff] font-lato">
-            <header className="mx-auto max-w-7xl px-5 py-4 sm:px-6 lg:px-8 text-[#000000]">
+        <div className={`bg-transparent`}>
+            <header className="mx-auto max-w-6xl px-5 py-8 lg:px-10 text-[#000000]">
                 <nav className="flex justify-between itens-center">
                     <div>
-                        {/* LOGO IMG AND NAME (img w-16 or so) */}
                         <h2 className="flex gap-2">
-                            <Link href="/" className="hover:text-gray-500">
+                            <Link href="/" className="text-white mt-1">
                                 Scroll Minter
                             </Link>
                             <Image
@@ -81,9 +40,29 @@ export default function Header() {
                                 : 'md:static absolute bg-[#ffffff] md:min-h-fit min-h-[30vh] left-0 top-[-100%] md:w-auto w-full flex md:items-center px-5 py-10 md:py-0'
                         }
                     >
-                        <ul className="flex md:flex-row flex-col items-center md:gap-[4vw] gap-4">
+                        <ul className="flex md:flex-row flex-col md:gap-[4vw] gap-4">
                             <li>
-                                <Link href="/" className="hover:text-gray-500">
+                                <Link
+                                    href="/add-collection"
+                                    className="hover:text-gray-500"
+                                    onClick={() => {}}
+                                >
+                                    <div className="flex gap-1 items-center">
+                                        <span>
+                                            <PlusIcon
+                                                width="15"
+                                                cursor="pointer"
+                                            />
+                                        </span>
+                                        <p>Add Collection</p>
+                                    </div>
+                                </Link>
+                            </li>
+                            <li>
+                                <Link
+                                    href="/collections"
+                                    className="hover:text-gray-500"
+                                >
                                     Collections
                                 </Link>
                             </li>
@@ -91,14 +70,10 @@ export default function Header() {
                                 {/* <Link href="/profile" className="hover:text-gray-500">My Profile</Link> */}
                                 <p className="text-gray-500">My Profile</p>
                             </li>
-                            <li>
-                                ETH Balance: {balance} ETH
-                            </li>
-                            <div className='text-center'>BlockNumber: {blockNumber}</div>
                         </ul>
                     </div>
                     <div className="flex items-center gap-6">
-                        <ConnectButton showBalance={false} />
+                        <w3m-button />
                         <div className="md:hidden" onClick={handleToggleMenu}>
                             {isMobileMenuOpen ? (
                                 <XMarkIcon width="25" cursor="pointer" />
