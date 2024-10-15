@@ -3,7 +3,7 @@ import Blockies from 'react-blockies';
 
 import { FileObject, PinataSDK } from 'pinata';
 
-export const SCROLL_SEPOLIA_CA = '0xE7ddc21df6Cd8Ef4822010713868f348C8859178';
+export const SCROLL_SEPOLIA_CA = '0x68df4D3380823335e69909Bd4E2a17E93093Ee77';
 
 const IMAGE_SAMPLE =
     'https://maroon-major-crawdad-175.mypinata.cloud/ipfs/bafkreiaiqqqnwyvi5gksqfwsqihdt7izf5fklnbehal7elyusducquwq6i';
@@ -65,3 +65,4 @@ export const getTokenURI = async (metadata: object) => {
     console.log(`ipfs://${upload.IpfsHash}`);
     return `ipfs://${upload.IpfsHash}`;
 };
+

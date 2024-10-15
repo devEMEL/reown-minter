@@ -18,7 +18,7 @@ export default function Header() {
     };
 
     return (
-        <div className={`bg-transparent`}>
+        <div className="bg-transparent">
             <header className="mx-auto max-w-6xl px-5 py-8 lg:px-10 text-[#000000]">
                 <nav className="flex justify-between itens-center">
                     <div>

@@ -51,6 +51,12 @@
                 },
                 {
                     "indexed": false,
+                    "internalType": "string",
+                    "name": "description",
+                    "type": "string"
+                },
+                {
+                    "indexed": false,
                     "internalType": "address",
                     "name": "owner",
                     "type": "address"
@@ -131,6 +137,11 @@
                 {
                     "internalType": "string",
                     "name": "_symbol",
+                    "type": "string"
+                },
+                {
+                    "internalType": "string",
+                    "name": "_description",
                     "type": "string"
                 },
                 {

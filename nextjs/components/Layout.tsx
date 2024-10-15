@@ -22,7 +22,7 @@ const Layout: FC<Props> = ({ children }) => {
                     {/* https://bg.ibelick.com/ */}
                 </div>
                 <Header />
-                <div className="min-h-screen py-16 max-w-6xl mx-auto space-y-8 px-5 lg:px-10">
+                <div className="min-h-screen max-w-6xl mx-auto space-y-8 px-5 lg:px-10">
                     {children}
                 </div>
 

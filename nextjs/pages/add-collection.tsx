@@ -1,5 +1,13 @@
+import ErrorAlert from '@/components/alerts/ErrorAlert';
+import LoadingAlert from '@/components/alerts/LoadingAlert';
+import SuccessAlert from '@/components/alerts/SuccessAlert';
 import { FileObject } from 'pinata';
-import React, { useState } from 'react';
+import { useEthersProvider, useEthersSigner } from './_app';
+import React, { FormEvent, useState } from 'react';
+import { ethers } from 'ethers';
+import NFTCollectionFactory from "../abi/NFTCollectionFactory.json";
+import { etherToWei, getImageURI, SCROLL_SEPOLIA_CA } from '@/helpers';
+
 
 const AddCollection = () => {
     const [name, setName] = useState<string>('');
@@ -10,12 +18,78 @@ const AddCollection = () => {
     const [price, setPrice] = useState<string>('');
     const [totalSupply, setTotalSupply] = useState<string>('');
 
-    const addProduct = () => {};
+    const [loadingStatus, setLoadingStatus] = useState<boolean>(false);
+    const [successStatus, setSuccessStatus] = useState<boolean>(false);
+    const [errorStatus, setErrorStatus] = useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = useState<any>("");
+
+    const provider = useEthersProvider();
+    const signer = useEthersSigner();
+
+
+    const clearAlert = () => setErrorStatus(false);
+
+    const addCollection = async(e: FormEvent<HTMLFormElement>) => {
+
+        e.preventDefault();
+        console.log("Adding Collection...");
+        if(!(name && symbol && description && imageFile && imagePreview && price && totalSupply)) return;
+
+        // show loading alert
+        setLoadingStatus(true);
+
+        try {
+            // Make txn
+            const tx = new ethers.Contract(SCROLL_SEPOLIA_CA, NFTCollectionFactory.abi, signer);
+            // function createCollection(string memory _name, string memory _symbol, uint256 _price, uint256 _maxSupply, string memory _imageURI) external 
+            const imageURI = await getImageURI(imageFile);
+            const _price = etherToWei(price);
+            const _totalSupply = BigInt(totalSupply);
+            const createCollectionTx = await tx.createCollection(name, symbol, description, _price, _totalSupply, imageURI);
+            const response = await createCollectionTx.wait();
+            console.log(response);
+
+            setLoadingStatus(false);
+        }catch(err) {
+
+            setErrorStatus(true);
+            setErrorMessage(err);
+        }
+    };
     return (
-        <div>
+        <div className='py-16'>
+            <button onClick={async() => {
+
+
+            }}>check</button>
+            <div>
+            {
+                loadingStatus && (
+                    <div className='mb-4'>
+                        <LoadingAlert message='' />
+                    </div>
+                )
+            }
+            {
+                errorStatus && (
+                    <div className='mb-4'>
+                        <ErrorAlert message={errorMessage} clear={clearAlert} />
+                    </div>
+                )
+            }
+            {
+                successStatus && (
+                    <div className='mb-4'>
+                        <SuccessAlert message='' />
+                    </div>
+                )
+            }
+            </div>
+            
             <div className="max-w-3xl mx-auto border border-white px-8 py-8 rounded-lg">
                 {/* Form with input fields for the product, that triggers the addProduct function on submit */}
-                <form onSubmit={addProduct}>
+                
+                <form onSubmit={addCollection}>
                     <div className="flex items-center justify-center min-height-100vh text-center sm:block sm:p-0">
                         {/* Input fields for the product */}
                         <div className="px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
@@ -44,8 +118,7 @@ const AddCollection = () => {
                                 className="w-full p-2 mt-4 mb-10 bg-transparent focus:outline-none border-b border-[#ffffff]"
                             />
 
-
-<label>Description</label>
+                            <label>Description</label>
                             <input
                                 onChange={(e) => {
                                     setDescription(e.target.value);
@@ -60,7 +133,9 @@ const AddCollection = () => {
                                 NFT Image
                                 <input
                                     onChange={async (e) => {
-                                        const file = e.target.files ?  e.target.files[0] : null;
+                                        const file = e.target.files
+                                            ? e.target.files[0]
+                                            : null;
                                         if (file) {
                                             setImageFile(file);
                                             const reader = new FileReader();
@@ -68,7 +143,7 @@ const AddCollection = () => {
                                             reader.onloadend = () => {
                                                 setImagePreview(reader.result);
 
-                                                console.log(reader.result);
+                                                // console.log(reader.result);
                                             };
                                             reader.readAsDataURL(file);
                                         }
