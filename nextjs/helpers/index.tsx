@@ -65,4 +65,3 @@ export const getTokenURI = async (metadata: object) => {
     console.log(`ipfs://${upload.IpfsHash}`);
     return `ipfs://${upload.IpfsHash}`;
 };
-

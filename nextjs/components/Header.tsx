@@ -59,10 +59,7 @@ export default function Header() {
                                 </Link>
                             </li>
                             <li>
-                                <Link
-                                    href="/collections"
-                                    className="hover:text-gray-500"
-                                >
+                                <Link href="/" className="hover:text-gray-500">
                                     Collections
                                 </Link>
                             </li>

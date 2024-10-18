@@ -8,7 +8,13 @@ import { ToastContainer } from 'react-toastify';
 import { Provider } from 'react-redux';
 import { store } from '../state/store';
 
-import { cookieToInitialState, WagmiProvider, type Config, useClient, useConnectorClient } from 'wagmi';
+import {
+    cookieToInitialState,
+    WagmiProvider,
+    type Config,
+    useClient,
+    useConnectorClient,
+} from 'wagmi';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
 import { defaultWagmiConfig } from '@web3modal/wagmi/react/config';
@@ -17,7 +23,6 @@ import { WagmiAdapter } from '@reown/appkit-adapter-wagmi';
 import { scrollSepolia } from '@reown/appkit/networks';
 import { createAppKit } from '@reown/appkit';
 import { createWeb3Modal, Web3Modal } from '@web3modal/wagmi';
-
 
 import { BrowserProvider, JsonRpcSigner } from 'ethers';
 import { useMemo } from 'react';
