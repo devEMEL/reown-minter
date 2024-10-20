@@ -4,7 +4,7 @@ import React, { useEffect, useMemo, useState } from 'react';
 import { useSelector } from 'react-redux';
 
 const CollectionPage = () => {
-    console.log("collection page mounted...")
+    console.log('collection page mounted...');
 
     const router = useRouter();
     const { items, loading } = useSelector((state: any) => state.appState);
@@ -14,13 +14,12 @@ const CollectionPage = () => {
     // const getFilteredCollection = () => {
     //     return items.filter((collection: any) => {
     //         return collection.id.toString() === id?.toString();
-    //     }); 
+    //     });
     // }
 
     const filteredCollection = items.filter((collection: any) => {
         return collection.id.toString() === id?.toString();
-    }); 
-
+    });
 
     // Handle loading state
     if (loading) {
@@ -34,14 +33,18 @@ const CollectionPage = () => {
 
     useEffect(() => {
         // setID_(id as string)
-        console.log("items from redux: ", items);
-    }, [])
+        console.log('items from redux: ', items);
+    }, []);
 
     return (
         <div>
-            <button onClick={() => {
-                console.log(filteredCollection)
-            }}>hcjdbdca</button>
+            <button
+                onClick={() => {
+                    console.log(filteredCollection);
+                }}
+            >
+                hcjdbdca
+            </button>
             <div>
                 <p>{filteredCollection[0].id}</p>
                 <p>{filteredCollection[0].name}</p>

@@ -2,7 +2,12 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCollections } from '@/state/appStateSlice';
 import { AppDispatch } from '@/state/store';
-import { getTokenURI, imageURIToSrc, truncateAddress, weiToEther } from '@/helpers';
+import {
+    getTokenURI,
+    imageURIToSrc,
+    truncateAddress,
+    weiToEther,
+} from '@/helpers';
 import Image from 'next/image';
 import { toast } from 'react-toastify';
 import { useRouter } from 'next/router';
@@ -12,7 +17,7 @@ import SuccessAlert from './alerts/SuccessAlert';
 import { useEthersProvider, useEthersSigner } from '@/pages/_app';
 import { ethers } from 'ethers';
 import NFTCollection from '../abi/NFTCollection.json';
-
+import CollectionItems from './CollectionItems';
 
 const queryURL =
     'https://api.studio.thegraph.com/query/91585/nft-factory-subgraph/version/latest';
@@ -43,7 +48,6 @@ query {
 `;
 
 const Collections = () => {
-
     const [loadingStatus, setLoadingStatus] = useState<boolean>(false);
     const [successStatus, setSuccessStatus] = useState<boolean>(false);
     const [errorStatus, setErrorStatus] = useState<boolean>(false);
@@ -64,20 +68,31 @@ const Collections = () => {
         imageURI: imageURIToSrc(item.imageURI),
     }));
 
-    const handleMintNFT = async(
-        imageURI: string,
-        name: string,
-        description: string,
-        contractAddress: string,
-        price: number
-    ) => {
+    const getTokenId = async(contractAddress: string) => {
 
         const contract = new ethers.Contract(
             contractAddress,
             NFTCollection.abi,
             provider
         );
-        const tokenId = await contract._tokenIds(); 
+        const tokenId = await contract._tokenIds();
+        return Number(String(tokenId));
+
+    };
+
+    const handleMintNFT = async (
+        imageURI: string,
+        name: string,
+        description: string,
+        contractAddress: string,
+        price: number
+    ) => {
+        const contract = new ethers.Contract(
+            contractAddress,
+            NFTCollection.abi,
+            provider
+        );
+        const tokenId = await contract._tokenIds();
         const nameAdd = Number(String(tokenId)) + 1;
 
         const metadata = {
@@ -144,9 +159,8 @@ const Collections = () => {
             srcImage,
         });
 
-        return  { newTokenId, srcImage }
-    }
-
+        return { newTokenId, srcImage };
+    };
 
     const mintNFT = async (
         imageURI: string,
@@ -155,7 +169,6 @@ const Collections = () => {
         contractAddress: string,
         price: number
     ) => {
-
         setLoadingStatus(true);
         const toastId = toast.loading('Minting NFT...');
 
@@ -172,17 +185,18 @@ const Collections = () => {
                 render: (
                     <div className="text-[#000000] bg-white p-4">
                         {srcImage && (
-                            <div className='flex flex-col justify-center items-center'>
-                                <h1 className='my-4'>NFT minted successfully...</h1>
-                                
-                                    <Image
-                                        src={srcImage}
-                                        alt="loading image"
-                                        width={150}
-                                        height={150}
-                                        className="rounded-lg"
-                                    />
-                             
+                            <div className="flex flex-col justify-center items-center">
+                                <h1 className="my-4">
+                                    NFT minted successfully...
+                                </h1>
+
+                                <Image
+                                    src={srcImage}
+                                    alt="loading image"
+                                    width={150}
+                                    height={150}
+                                    className="rounded-lg"
+                                />
 
                                 <div className="my-4 text-center">
                                     {name} #{newTokenId}
@@ -197,7 +211,7 @@ const Collections = () => {
             });
 
             setLoadingStatus(false);
-        } catch(err) {
+        } catch (err) {
             toast.update(toastId, {
                 render: 'Something went wrong. Try again.',
                 type: 'error',
@@ -208,8 +222,6 @@ const Collections = () => {
             setErrorStatus(true);
             setErrorMessage(err);
         }
-
-
     };
 
     useEffect(() => {
@@ -219,11 +231,10 @@ const Collections = () => {
         }
         console.log(updatedItems);
     }, []);
-    
 
     return (
-        <div className='py-16'>
-                        {/* <div>
+        <div className="py-16">
+            {/* <div>
                 {loadingStatus && (
                     <div className="mb-4">
                         <LoadingAlert message="" />
@@ -240,82 +251,55 @@ const Collections = () => {
                     </div>
                 )}
             </div> */}
-        
-        <div className="mx-auto max-w-7xl px-5 py-10 sm:px-6 lg:px-8 bg-[#ffffff] text-[#000000] rounded-2xl mt-10 min-h-screen overflow-x-scroll">
 
-            <table className="shadow-2xl font-lato border-2 border-black-400 w-full">
-                {/* add overflow-hidden later */}
-                <thead>
-                    <tr>
-                        <th className="py-3 bg-gray-800 text-[#ffffff]">N</th>
-                        <th className="py-3 bg-gray-800 text-[#ffffff]">
-                            Image
-                        </th>
-                        <th className="py-3 bg-gray-800 text-[#ffffff]">
-                            Name
-                        </th>
-                        <th className="py-3 bg-gray-800 text-[#ffffff]">
-                            Address (CA)
-                        </th>
-                        <th className="py-3 bg-gray-800 text-[#ffffff]">
-                            Price (ETH)
-                        </th>
-                        <th className="py-3 bg-gray-800 text-[#ffffff]">
-                            Total Supply
-                        </th>
-                        <th className="py-3 bg-gray-800 text-[#ffffff]">
-                            Mint
-                        </th>
-                    </tr>
-                </thead>
-                <tbody className="text-gray-800 text-center">
-                    {updatedItems &&
-                        updatedItems.map((el: any, index: any) => (
-                            <tr
-                                key={`${index}l`}
-                                className="bg-[#ffffff] text-center"
-                            >
-                                <td className="py-6 px-6">{index}</td>
-                                <td className="py-6 px-6">
-                                    <img
-                                        src={el.imageURI}
-                                        className="w-20 rounded-lg"
-                                    />
-                                </td>
-                                <td className="py-6 px-6">{el.name}</td>
-                                <td className="py-6 px-6">
-                                    {truncateAddress(el.contractAddress)}
-                                </td>
-                                <td className="py-6 px-6">
-                                    {Number(weiToEther(String(el.price)))}
-                                </td>
-                                <td className="py-6 px-6">{el.maxSupply}</td>
-                                <td className="py-6 px-6">
-                                    <button
-                                        className="bg-gray-800 text-[#ffffff] py-1 px-4"
-                                        onClick={() =>
-                                            mintNFT(
-                                                el.imageURI,
-                                                el.name,
-                                                el.description,
-                                                el.id,  // contractAddress
-                                                el.price
-                                            )
-                                        }
-                                    >
-                                        Mint
-                                    </button>
-                                </td>
-                            </tr>
-                        ))}
-                </tbody>
-            </table>
+            <div className="mx-auto max-w-7xl px-5 py-10 sm:px-6 lg:px-8 bg-[#ffffff] text-[#000000] rounded-2xl mt-10 min-h-screen overflow-x-scroll">
+                <table className="shadow-2xl font-lato border-2 border-black-400 w-full">
+                    {/* add overflow-hidden later */}
+                    <thead>
+                        <tr>
+                            <th className="py-3 bg-gray-800 text-[#ffffff]">
+                                N
+                            </th>
+                            <th className="py-3 bg-gray-800 text-[#ffffff]">
+                                Image
+                            </th>
+                            <th className="py-3 bg-gray-800 text-[#ffffff]">
+                                Name
+                            </th>
+                            <th className="py-3 bg-gray-800 text-[#ffffff]">
+                                Address (CA)
+                            </th>
+                            <th className="py-3 bg-gray-800 text-[#ffffff]">
+                                Price (ETH)
+                            </th>
+                            <th className="py-3 bg-gray-800 text-[#ffffff]">
+                                Total Supply
+                            </th>
+                            <th className="py-3 bg-gray-800 text-[#ffffff]">
+                                Amount Minted
+                            </th>
+                            <th className="py-3 bg-gray-800 text-[#ffffff]">
+                                Mint
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody className="text-gray-800 text-center">
+                        {updatedItems &&
+                            updatedItems.map((el: any, index: any) => (
+                                <CollectionItems
+                                    data={el}
+                                    index={index}
+                                    mintNFT={mintNFT}
+                                    getTokenId={getTokenId}
+                                />
+                            ))}
+                    </tbody>
+                </table>
 
-            {/* <MintSuccessNotification isVisible={isVisible} setVisibility={setVisibility} /> */}
+                {/* <MintSuccessNotification isVisible={isVisible} setVisibility={setVisibility} /> */}
 
-
-            {/* <button className='p-4 text-white bg-black' onClick={mintNFT}>mint nft</button> */}
-        </div>
+                {/* <button className='p-4 text-white bg-black' onClick={mintNFT}>mint nft</button> */}
+            </div>
         </div>
     );
 };
