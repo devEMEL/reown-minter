@@ -1,20 +1,29 @@
 import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
 import axios from 'axios';
 
-interface itemsInterface {
-    chainId: number;
-    contractAddress: string;
+interface FactoryProps {
+    id: number;
+}
+
+interface collectionProps {
+    id: number;
+    factory: FactoryProps;
     name: string;
     symbol: string;
-    creator: string;
-    timestamp: number;
+    description: string;
     price: number;
     maxSupply: number;
     imageURI: string;
+    timeCreated: number;
+}
+
+interface queryParams {
+    queryURL: string;
+    query: any;
 }
 
 interface stateInterface {
-    items: Array<itemsInterface>;
+    items: Array<collectionProps>;
     loading: boolean;
     error: any;
 }
@@ -37,11 +46,14 @@ const initialState: stateInterface = {
     error: null,
 };
 
-export const fetchNfts = createAsyncThunk(
-    'nfts/fetchNfts',
-    async (requestURL: string) => {
-        const response = await axios.get(requestURL);
-        return response.data.data.nfts;
+export const fetchCollections = createAsyncThunk(
+    'nfts/fetchCollections',
+    async (params: queryParams) => {
+        const response = await axios.post(params.queryURL, {
+            query: params.query,
+        });
+        const result = await response.data.data;
+        return result.collections;
     }
 );
 
@@ -51,15 +63,16 @@ const appStateSlice = createSlice({
     reducers: {},
     extraReducers: (builder) => {
         builder
-            .addCase(fetchNfts.pending, (state) => {
+            .addCase(fetchCollections.pending, (state) => {
                 state.loading = true;
                 state.error = null;
             })
-            .addCase(fetchNfts.fulfilled, (state, action) => {
+            .addCase(fetchCollections.fulfilled, (state, action) => {
                 state.loading = false;
                 state.items = action.payload;
+                console.log(action.payload);
             })
-            .addCase(fetchNfts.rejected, (state, action) => {
+            .addCase(fetchCollections.rejected, (state, action) => {
                 state.loading = false;
                 state.error = action.error.message;
             });

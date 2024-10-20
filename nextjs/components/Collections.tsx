@@ -1,97 +1,92 @@
-import React, { useEffect, useState } from 'react';
-import axios from 'axios';
+import React, { useEffect } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchCollections } from '@/state/appStateSlice';
+import { AppDispatch } from '@/state/store';
+import { imageURIToSrc } from '@/helpers';
+import Image from 'next/image';
+import { LinkIcon } from '@heroicons/react/24/outline';
+import { useRouter } from 'next/router';
 
-interface FactoryProps {
-    id: number
-}
+const queryURL =
+    'https://api.studio.thegraph.com/query/91585/nft-factory-subgraph/version/latest';
 
-interface collectionProps {
-    id: number;
-    factory: FactoryProps;
-    name: string;
-    symbol: string;
-    description: string;
-    price: number;
-    maxSupply: number;
-    imageURI: string;
-    timeCreated: number;
-
-}
+const query = `
+query {      
+    collectionFactories(first: 5) {
+        id
+        collections {
+            id
+        }
+    }
+    collections(first: 5) {
+        id
+        factory {
+            id
+        }
+        owner
+        name
+        symbol
+        description
+        price
+        maxSupply
+        imageURI
+        timeCreated
+    }
+}       
+`;
 
 const Collections = () => {
-    const [collections, setCollections] = useState<collectionProps[]>([]);
-    const queryURL =
-        'https://api.studio.thegraph.com/query/91585/nft-factory-subgraph/version/latest';
+    const router = useRouter();
 
-    const fetchNFTCollections = async () => {
-        console.log('Fetching nft collections...');
+    const dispach = useDispatch<AppDispatch>();
+    const { items, loading } = useSelector((state: any) => state.appState);
 
-        const query = `
-            query {      
-                collectionFactories(first: 5) {
-                    id
-                    collections {
-                        id
-                    }
-                }
-                collections(first: 5) {
-                    id
-                    factory {
-                        id
-                    }
-                    name
-                    symbol
-                    description
-                    price
-                    maxSupply
-                    imageURI
-                    timeCreated
-                }
-            }       
-        `;
-        const response = await axios.post(queryURL,{
-                query: query
-            }
-        );
-        const result = await response.data.data;
-        return result;
-    };
-
-    const callFetchNFTCollections = async() => {
-        const res = await fetchNFTCollections();
-        setCollections(res.collections);
-        console.log(res.collections);
-    }
+    const updatedItems = items.map((item: any) => ({
+        ...item,
+        imageURI: imageURIToSrc(item.imageURI),
+    }));
 
     useEffect(() => {
         console.log('Fetching data from blockchain...');
-        callFetchNFTCollections();
+        if (loading === false) {
+            dispach(fetchCollections({ queryURL, query }));
+        }
+        console.log(updatedItems);
     }, []);
     return (
         <>
             <div>Collections</div>
-            <div>
-               {
-                collections && (
-                    <div>
-                        {
-                            collections.map((collection: collectionProps) => (
-                                <div className='mb-3' key={`${collection.id} + 1`}>
-                                    { collection.id }
-                                    { collection.factory.id }
-                                    { collection.name }
-                                    { collection.symbol }
-                                    { collection.description }
-                                    { collection.price }
-                                    { collection.maxSupply }
-                                    { collection.imageURI }
-                                    { collection.timeCreated }
+
+            <div className="flex flex-wrap pt-4 pb-10 my-10">
+                {updatedItems &&
+                    updatedItems.map((item: any) => (
+                        <div
+                            className="w-1/2 md:w-1/3 mb-10 cursor-pointer"
+                            key={`${item.id}`}
+                            onClick={() => {
+                                //
+                                router.push(`/collection/${item.id}`);
+                            }}
+                        >
+                            <div className="flex justify-center">
+                                <div className="w-full">
+                                    <Image
+                                        src={item.imageURI}
+                                        alt={item.name}
+                                        width={700}
+                                        height={500}
+                                        className="w-[95%] max-h-[250px] rounded-lg"
+                                    />
+                                    <div className="flex gap-2 mt-8 justify-center italic tracking-wide ">
+                                        <p className="bg-gradient-to-r from-red-900 to-black bg-clip-text text-transparent">
+                                            Visit Page
+                                        </p>
+                                        <LinkIcon width="25" cursor="pointer" />
+                                    </div>
                                 </div>
-                            ))
-                    }
-                    </div>
-                )
-               }
+                            </div>
+                        </div>
+                    ))}
             </div>
         </>
     );
