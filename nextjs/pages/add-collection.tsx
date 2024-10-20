@@ -20,7 +20,7 @@ const AddCollection = () => {
     const [loadingStatus, setLoadingStatus] = useState<boolean>(false);
     const [successStatus, setSuccessStatus] = useState<boolean>(false);
     const [errorStatus, setErrorStatus] = useState<boolean>(false);
-    const [errorMessage, setErrorMessage] = useState<any>('');
+    const [errorMessage, setErrorMessage] = useState<any>('Error...');
 
     const provider = useEthersProvider();
     const signer = useEthersSigner();
@@ -76,7 +76,7 @@ const AddCollection = () => {
     };
     return (
         <div className="py-16">
-            <button onClick={async () => {}}>check</button>
+            {/* <button onClick={async () => {}}>check</button> */}
             <div>
                 {loadingStatus && (
                     <div className="mb-4">

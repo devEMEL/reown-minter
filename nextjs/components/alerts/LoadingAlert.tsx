@@ -4,7 +4,7 @@ export interface LoadingAlertProps {
 const LoadingAlert = ({ message }: LoadingAlertProps) => {
     return (
         <div
-            className="fixed bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-3"
+            className="fixed w-1/2 bg-blue-100 border-t border-b border-blue-500 text-blue-700 px-4 py-8"
             role="alert"
         >
             <p className="font-bold">{message || 'Loading...'}</p>
