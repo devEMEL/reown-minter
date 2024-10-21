@@ -289,6 +289,7 @@ const Collections = () => {
                                 <CollectionItems
                                     data={el}
                                     index={index}
+                                    key={index}
                                     mintNFT={mintNFT}
                                     getTokenId={getTokenId}
                                 />

@@ -1,7 +1,7 @@
 import { truncateAddress, weiToEther } from '@/helpers';
 import React, { useEffect, useState } from 'react';
 
-const CollectionItems = ({ data, index, mintNFT, getTokenId }) => {
+const CollectionItems = ({ data, index, key, mintNFT, getTokenId }) => {
 
     const [tokenId, setTokenId] = useState(0);
 
@@ -16,7 +16,7 @@ const CollectionItems = ({ data, index, mintNFT, getTokenId }) => {
         getToken();
     }, [mintNFT])
     return (
-        <tr key={`${index}l`} className="bg-[#ffffff] text-center">
+        <tr key={`${key}l`} className="bg-[#ffffff] text-center">
             <td className="py-6 px-6">{index}</td>
             <td className="py-6 px-6">
                 <img src={data.imageURI} className="w-20 rounded-lg" />
