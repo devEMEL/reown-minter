@@ -253,7 +253,7 @@ const Collections = () => {
             </div> */}
 
             <div className="mx-auto max-w-7xl px-5 py-10 sm:px-6 lg:px-8 bg-[#ffffff] text-[#000000] rounded-2xl mt-10 min-h-screen overflow-x-scroll">
-                <table className="shadow-2xl font-lato border-2 border-black-400 w-full">
+                <table className="shadow-2xl border-2 border-black-400 w-full">
                     {/* add overflow-hidden later */}
                     <thead>
                         <tr>
