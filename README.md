@@ -1,9 +1,9 @@
-# SCROLL MINTER
+# REOWN MINTER
 ## Vision
 To democratize the creation and distribution of NFTs.
 
 ## Description
-Scroll Minter is a platform that allows users to easily create their own NFT collections. Once created, users can mint unique NFTs from these collections, empowering creators and providing collectors with a variety of NFTs to explore.
+Reown Minter is a platform that allows users to easily create their own NFT collections. Once created, users can mint unique NFTs from these collections, empowering creators and providing collectors with a variety of NFTs to explore.
 
 ## Contract Information
 Factory Contract: [0x68df4D3380823335e69909Bd4E2a17E93093Ee77](https://sepolia.scrollscan.com/address/0x68df4d3380823335e69909bd4e2a17e93093ee77) (deployed and verified on scroll sepolia network)
@@ -15,7 +15,7 @@ Factory Contract: [0x68df4D3380823335e69909Bd4E2a17E93093Ee77](https://sepolia.s
 - Scalable Architecture: Built to handle multiple collections and mints seamlessly.
 
 ## Project demo URL
-[Scroll Minter](https://scl-minter.vercel.app/)
+[Reown Minter](https://scl-minter.vercel.app/)
 
 ## Network details
 - Network name: Scroll Sepolia

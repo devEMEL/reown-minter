@@ -24,7 +24,7 @@ export default function Header() {
                     <div>
                         <h2 className="flex gap-2">
                             <Link href="/" className="text-white mt-1">
-                                Scroll Minter
+                                Reown Minter
                             </Link>
                             <Image
                                 src={kombatOdysseyImg}

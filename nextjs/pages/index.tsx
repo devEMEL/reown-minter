@@ -11,7 +11,7 @@ export default function Home() {
                     href="favicon.ico"
                     type="image/x-icon"
                 />
-                <title>Scroll Minter</title>
+                <title>Reown Minter</title>
                 <meta
                     httpEquiv="Content-Security-Policy"
                     content="upgrade-insecure-requests"
