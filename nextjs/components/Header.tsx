@@ -19,25 +19,26 @@ export default function Header() {
 
     return (
         <div className="bg-transparent">
-            <header className="mx-auto max-w-6xl px-5 py-8 lg:px-10 text-[#000000]">
+            <header className="mx-auto max-w-6xl px-5 py-8 lg:px-10 text-[#ffffff]">
                 <nav className="flex justify-between itens-center">
                     <div>
                         <h2 className="flex gap-2">
+                            <Image
+                                src={kombatOdysseyImg}
+                                className="w-8 rounded-full h-auto"
+                                alt=""
+                            />
                             <Link href="/" className="text-white mt-1">
                                 Reown Minter
                             </Link>
-                            <Image
-                                src={kombatOdysseyImg}
-                                className="w-5 h-5 rounded-full h-auto"
-                                alt=""
-                            />
+                            
                         </h2>
                     </div>
                     <div
                         className={
                             isMobileMenuOpen
-                                ? 'md:static absolute bg-[#ffffff] md:min-h-fit min-h-[30vh] left-0 top-[7%] md:w-auto w-full flex md:items-center px-5 py-10 md:py-0'
-                                : 'md:static absolute bg-[#ffffff] md:min-h-fit min-h-[30vh] left-0 top-[-100%] md:w-auto w-full flex md:items-center px-5 py-10 md:py-0'
+                                ? 'md:static absolute md:min-h-fit min-h-[30vh] left-0 top-[7%] md:w-auto w-full flex md:items-center px-5 py-10 md:py-0'
+                                : 'md:static absolute md:min-h-fit min-h-[30vh] left-0 top-[-100%] md:w-auto w-full flex md:items-center px-5 py-10 md:py-0'
                         }
                     >
                         <ul className="flex md:flex-row flex-col md:gap-[4vw] gap-4">
